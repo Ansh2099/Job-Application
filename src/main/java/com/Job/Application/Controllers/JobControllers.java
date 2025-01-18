@@ -36,7 +36,13 @@ public class JobControllers {
 
     @PostMapping("/")
     public ResponseEntity<?> postJob(@Valid @RequestBody Jobs jobs){
-        return new ResponseEntity<>(service.postJob(jobs), HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(service.postJob(jobs), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @DeleteMapping("/{id}")
@@ -50,4 +56,17 @@ public class JobControllers {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateJobs(@Valid @RequestPart Jobs jobs, @RequestPart Long id){
+        try {
+            Jobs job = service.getJobById(id);
+
+            if (job != null)
+                return new ResponseEntity<>(service.updateJobs(jobs, id), HttpStatus.FOUND);
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
