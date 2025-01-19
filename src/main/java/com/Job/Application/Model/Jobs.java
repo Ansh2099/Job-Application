@@ -11,6 +11,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -39,4 +42,8 @@ public class Jobs {
     @NotBlank
     @Size(max = 100)
     private String location;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Companies company;
 }

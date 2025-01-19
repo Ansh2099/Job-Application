@@ -1,6 +1,5 @@
 package com.Job.Application.Controllers;
 
-import com.Job.Application.Model.Jobs;
 import com.Job.Application.Model.Reviews;
 import com.Job.Application.Service.ReviewService;
 import jakarta.validation.Valid;
@@ -11,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/reviews")
 public class ReviewControllers {
 
     @Autowired

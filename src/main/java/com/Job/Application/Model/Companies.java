@@ -30,7 +30,11 @@ public class Companies {
     @Size(max = 1000)
     private String desc;
 
-    //@JsonIgnore
-    //@OneToMany
-    //private List<Jobs> jobs;
+    @JsonIgnore
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private List<Jobs> jobs;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private List<Reviews> reviews;
 }

@@ -1,6 +1,5 @@
 package com.Job.Application.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -8,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @Entity
@@ -33,7 +30,7 @@ public class Reviews {
     @NotBlank(message = "Rating cannot be blank")
     private double rating;
 
-    //@JsonIgnore
-    //@ManyToOne
-    //private List<Companies> company;
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Companies company;
 }
