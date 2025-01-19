@@ -2,10 +2,9 @@ package com.Job.Application.Model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,6 +12,8 @@ import org.springframework.stereotype.Component;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Reviews {
 
     @Id
@@ -27,10 +28,26 @@ public class Reviews {
     @Size(max = 100)
     private String desc;
 
-    @NotBlank(message = "Rating cannot be blank")
+    @NotNull(message = "Rating cannot be null")
     private double rating;
 
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Companies company;
+
+    public Companies getCompany() {
+        return company;
+    }
+
+    public void setCompany(Companies company) {
+        this.company = company;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

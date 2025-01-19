@@ -6,9 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import jakarta.persistence.ManyToOne;
@@ -46,4 +44,20 @@ public class Jobs {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Companies company;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Companies getCompany() {
+        return company;
+    }
+
+    public void setCompany(Companies company) {
+        this.company = company;
+    }
 }

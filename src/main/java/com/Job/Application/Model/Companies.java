@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,6 +14,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Companies {
 
     @Id
@@ -37,4 +37,28 @@ public class Companies {
     @JsonIgnore
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Reviews> reviews;
+
+    public List<Reviews> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Reviews> reviews) {
+        this.reviews = reviews;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Jobs> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(List<Jobs> jobs) {
+        this.jobs = jobs;
+    }
 }
