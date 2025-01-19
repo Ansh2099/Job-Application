@@ -33,7 +33,7 @@ public class Reviews {
     @NotBlank(message = "Rating cannot be blank")
     private double rating;
 
-    @JsonIgnore
-    @ManyToOne
-    private List<Companies> company;
+    //@JsonIgnore
+    //@ManyToOne
+    //private List<Companies> company;
 }

@@ -30,7 +30,7 @@ public class Companies {
     @Size(max = 1000)
     private String desc;
 
-    @JsonIgnore
-    @OneToMany
-    private List<Jobs> jobs;
+    //@JsonIgnore
+    //@OneToMany
+    //private List<Jobs> jobs;
 }
