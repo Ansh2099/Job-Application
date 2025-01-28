@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 @NoArgsConstructor
 @Entity
 @Component
+@ToString
 public class Jobs {
 
     @Id

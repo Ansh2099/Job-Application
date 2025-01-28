@@ -4,6 +4,7 @@ Tech Stack:
 - Java 21
 - Spring Boot 3.4.1
 - Spring Data JPA
+- Spring Security
 - H2 Database
 - Lombok
 - Jakarta Validation
@@ -12,7 +13,7 @@ Tech Stack:
 Core Features:
 1. Company Management
 - CRUD operations for companies
-- Company profiles with name and description
+- Company profiles with username and description
 - One-to-many relationships with jobs and reviews
 
 2. Job Postings
