@@ -1,5 +1,6 @@
 package com.Job.Application.Model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.GeneratedValue;
@@ -7,9 +8,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.JoinColumn;
 
 @AllArgsConstructor
@@ -42,6 +49,11 @@ public class Jobs {
     @Size(max = 100)
     private String location;
 
+    // Add this field to the existing Jobs class
+    @JsonIgnore
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
+    private List<JobApplication> applications;
+    
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Companies company;
