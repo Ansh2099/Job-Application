@@ -1,7 +1,6 @@
 package com.Job.Application.Service;
 
 import com.Job.Application.Model.Users;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,7 +9,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class MyUserDetails implements UserDetails {
 
