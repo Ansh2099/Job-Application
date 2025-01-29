@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/companies/{companyId}/jobs")
 public class JobControllers {
@@ -59,7 +59,7 @@ public class JobControllers {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteJob(@PathVariable Long companyId, @PathVariable Long id) {
+    public ResponseEntity<Void> deleteJob(@PathVariable Long companyId, @PathVariable Long id) {
         Jobs job = service.getJobById(id);
         if (job != null && job.getCompany().getId().equals(companyId)) {
             service.deleteJob(id);
