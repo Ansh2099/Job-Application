@@ -52,7 +52,7 @@ public class Jobs {
     // Add this field to the existing Jobs class
     @JsonIgnore
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
-    private List<JobApplication> applications;
+    private List<JobSubmission> applications;
     
     @ManyToOne
     @JoinColumn(name = "company_id")
