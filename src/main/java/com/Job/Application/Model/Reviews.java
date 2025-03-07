@@ -5,16 +5,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.stereotype.Component;
 
-@Component
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Reviews {
 
     @Id
@@ -35,20 +32,4 @@ public class Reviews {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Companies company;
-
-    public Companies getCompany() {
-        return company;
-    }
-
-    public void setCompany(Companies company) {
-        this.company = company;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
