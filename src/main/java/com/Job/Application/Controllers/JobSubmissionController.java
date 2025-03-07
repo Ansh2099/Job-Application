@@ -1,5 +1,6 @@
 package com.Job.Application.Controllers;
 
+import com.Job.Application.Constants.ApplicationStatus;
 import com.Job.Application.Model.JobSubmission;
 import com.Job.Application.Service.JobSubmissionService;
 import com.Job.Application.Service.JobsService;
@@ -40,7 +41,7 @@ public class JobSubmissionController {
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<?> updateApplicationStatus(@PathVariable Long id, 
-                                                  @RequestParam JobSubmission.ApplicationStatus status) {
+                                                  @RequestParam ApplicationStatus status) {
         JobSubmission updated = service.updateApplicationStatus(id, status);
         if (updated != null) {
             return new ResponseEntity<>(updated, HttpStatus.OK);

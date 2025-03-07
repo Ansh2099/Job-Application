@@ -4,6 +4,8 @@ import com.Job.Application.Model.JobSubmission;
 import com.Job.Application.Repo.JobSubmissionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.Job.Application.Constants.ApplicationStatus;
+
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class JobSubmissionService {
         return repo.findByJobCompanyId(companyId);
     }
 
-    public JobSubmission updateApplicationStatus(Long id, JobSubmission.ApplicationStatus status) {
+    public JobSubmission updateApplicationStatus(Long id, ApplicationStatus status) {
         JobSubmission application = repo.findById(id).orElse(null);
         if (application != null) {
             application.setStatus(status);

@@ -5,6 +5,7 @@ import com.Job.Application.Service.ReviewService;
 import com.Job.Application.Service.CompanyService;
 import com.Job.Application.Model.Companies;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +16,12 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/companies/{companyId}/reviews")
+@RequiredArgsConstructor
 public class ReviewControllers {
 
-    @Autowired
-    private ReviewService service;
+    private final ReviewService service;
 
-    @Autowired
-    private CompanyService companyService;
+    private final CompanyService companyService;
 
     @GetMapping("/")
     public ResponseEntity<List<Reviews>> getAllReviews(@PathVariable Long companyId) {

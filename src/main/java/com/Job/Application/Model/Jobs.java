@@ -11,20 +11,18 @@ import lombok.*;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.JoinColumn;
 
-@AllArgsConstructor
 @Data
-@NoArgsConstructor
 @Entity
-@Component
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Jobs {
 
     @Id
@@ -49,7 +47,6 @@ public class Jobs {
     @Size(max = 100)
     private String location;
 
-    // Add this field to the existing Jobs class
     @JsonIgnore
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
     private List<JobSubmission> applications;
@@ -57,20 +54,4 @@ public class Jobs {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Companies company;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Companies getCompany() {
-        return company;
-    }
-
-    public void setCompany(Companies company) {
-        this.company = company;
-    }
 }
