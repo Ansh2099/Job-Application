@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.Job.Application.Model.Jobs;
@@ -23,6 +24,7 @@ public class JobControllers {
     private final JobsService service;
     private final CompanyService companyService;
 
+    // Everyone can view job listings
     @GetMapping("/")
     public ResponseEntity<List<Jobs>> getAllJobs(@PathVariable Long companyId) {
         Companies company = companyService.getCompanyById(companyId);
@@ -32,6 +34,7 @@ public class JobControllers {
         return new ResponseEntity<>(company.getJobs(), HttpStatus.FOUND);
     }
 
+    // Everyone can view job details
     @GetMapping("/{id}")
     public ResponseEntity<Jobs> getJobById(@PathVariable Long id){
         Jobs job = service.getJobById(id);
@@ -41,7 +44,9 @@ public class JobControllers {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    // Only recruiters can post new jobs
     @PostMapping("/")
+    @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<?> postJob(@PathVariable Long companyId, @Valid @RequestBody Jobs job) {
         try {
             Companies company = companyService.getCompanyById(companyId);
@@ -53,10 +58,11 @@ public class JobControllers {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
 
+    // Only recruiters can delete jobs
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<Void> deleteJob(@PathVariable Long companyId, @PathVariable Long id) {
         Jobs job = service.getJobById(id);
         if (job != null && job.getCompany().getId().equals(companyId)) {
@@ -66,7 +72,9 @@ public class JobControllers {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    // Only recruiters can update jobs
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<?> updateJob(@PathVariable Long companyId,
                                      @PathVariable Long id,
                                      @Valid @RequestBody Jobs job) {

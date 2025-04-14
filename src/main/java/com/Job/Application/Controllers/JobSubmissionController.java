@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -21,6 +22,7 @@ public class JobSubmissionController {
     private final JobsService jobsService;
 
     @PostMapping("/jobs/{jobId}/apply")
+    @PreAuthorize("hasRole('JOB_SEEKER')")
     public ResponseEntity<?> submitApplication(@PathVariable Long jobId, 
                                             @Valid @RequestBody JobSubmission application) {
         try {
@@ -33,12 +35,14 @@ public class JobSubmissionController {
     }
 
     @GetMapping("/companies/{companyId}")
+    @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<?> getCompanyApplications(@PathVariable Long companyId) {
         return new ResponseEntity<>(service.getApplicationsByCompany(companyId), 
                                   HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/status")
+    @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<?> updateApplicationStatus(@PathVariable Long id, 
                                                   @RequestParam ApplicationStatus status) {
         JobSubmission updated = service.updateApplicationStatus(id, status);
