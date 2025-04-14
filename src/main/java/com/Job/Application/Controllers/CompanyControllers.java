@@ -12,6 +12,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+
 @RequestMapping("/companies")
 public class CompanyControllers {
 

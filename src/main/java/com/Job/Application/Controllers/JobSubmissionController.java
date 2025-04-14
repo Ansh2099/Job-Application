@@ -5,21 +5,20 @@ import com.Job.Application.Model.JobSubmission;
 import com.Job.Application.Service.JobSubmissionService;
 import com.Job.Application.Service.JobsService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/applications")
 public class JobSubmissionController {
 
-    @Autowired
-    private JobSubmissionService service;
-
-    @Autowired
-    private JobsService jobsService;
+    private final JobSubmissionService service;
+    private final JobsService jobsService;
 
     @PostMapping("/jobs/{jobId}/apply")
     public ResponseEntity<?> submitApplication(@PathVariable Long jobId, 

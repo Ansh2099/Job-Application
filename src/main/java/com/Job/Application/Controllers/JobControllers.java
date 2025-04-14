@@ -3,27 +3,25 @@ package com.Job.Application.Controllers;
 import com.Job.Application.Service.JobsService;
 import com.Job.Application.Service.CompanyService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import com.Job.Application.Model.Jobs;
 import com.Job.Application.Model.Companies;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/companies/{companyId}/jobs")
 public class JobControllers {
 
-    @Autowired
-    private JobsService service;
-
-    @Autowired
-    private CompanyService companyService;
+    private final JobsService service;
+    private final CompanyService companyService;
 
     @GetMapping("/")
     public ResponseEntity<List<Jobs>> getAllJobs(@PathVariable Long companyId) {
