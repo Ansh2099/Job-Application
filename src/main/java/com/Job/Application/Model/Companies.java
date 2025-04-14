@@ -17,7 +17,7 @@ import java.util.List;
 public class Companies {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private Long id;
 
     @NotBlank(message = "Title cannot be blank")
@@ -34,5 +34,5 @@ public class Companies {
 
     @JsonIgnore
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-    private List<Reviews> reviews;
+    private List<Reviews> reviews;    
 }

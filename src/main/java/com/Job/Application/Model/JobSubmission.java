@@ -18,7 +18,7 @@ import com.Job.Application.Constants.ApplicationStatus;
 public class JobSubmission {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private Long id;
     
     @NotBlank

@@ -15,7 +15,7 @@ import lombok.*;
 public class Reviews {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private Long id;
 
     @NotBlank(message = "Title cannot be blank")

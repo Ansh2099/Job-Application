@@ -26,8 +26,8 @@ import jakarta.persistence.JoinColumn;
 public class Jobs {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private Long id;
 
     @NotBlank
     @Size(max = 100)
