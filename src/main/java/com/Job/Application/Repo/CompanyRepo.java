@@ -1,7 +1,6 @@
 package com.Job.Application.Repo;
 
 import com.Job.Application.Model.Companies;
-import com.Job.Application.Model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,5 +14,4 @@ public interface CompanyRepo extends JpaRepository<Companies, Long> {
             "LOWER(p.desc) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Companies> searchByKeyword(String keyword);
 
-    Users findbyusername(String username);
 }
