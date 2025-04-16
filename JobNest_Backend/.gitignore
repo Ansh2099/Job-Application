@@ -30,6 +30,7 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
+.vscode/*
 
-JobNest_Backend/src/main/resources/Config/.env
+### Local Comfig ###
+src/main/resources/application-local.yml
