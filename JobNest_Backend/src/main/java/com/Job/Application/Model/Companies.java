@@ -17,7 +17,7 @@ import java.util.List;
 public class Companies {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "Title cannot be blank")

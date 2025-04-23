@@ -15,7 +15,7 @@ import lombok.*;
 public class Reviews {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "Title cannot be blank")
@@ -23,11 +23,14 @@ public class Reviews {
     private String title;
 
     @NotBlank(message = "Description cannot be blank")
-    @Size(max = 100)
-    private String desc;
+    @Size(max = 1000)
+    private String description;
 
     @NotNull(message = "Rating cannot be null")
     private double rating;
+    
+    // ID of the user who created the review
+    private String userId;
 
     @ManyToOne
     @JoinColumn(name = "company_id")

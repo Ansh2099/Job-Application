@@ -1,5 +1,6 @@
 package com.Job.Application.Model;
 
+import com.Job.Application.Common.BaseAuditClass;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -14,7 +15,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+
+public class User extends BaseAuditClass {
 
     @Id
     private String id; // Using Keycloak UUID as primary key
@@ -51,11 +53,9 @@ public class User {
     @JoinColumn(name = "company_id")
     private Companies company;
     private String position;
-    
-    // Field to track if this is the first time the user has logged in
-    private boolean firstLogin = true;
-    
+
     // Utility methods
+    @Transient
     public boolean isJobSeeker() {
         return roles != null && roles.contains("ROLE_JOB_SEEKER");
     }
