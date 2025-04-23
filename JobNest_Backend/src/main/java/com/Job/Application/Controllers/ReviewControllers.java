@@ -1,13 +1,16 @@
 package com.Job.Application.Controllers;
 
-import com.Job.Application.Model.Reviews;
-import com.Job.Application.Service.ReviewService;
-import com.Job.Application.Service.CompanyService;
 import com.Job.Application.Model.Companies;
+import com.Job.Application.Model.Reviews;
+import com.Job.Application.Model.User;
+import com.Job.Application.Service.CompanyService;
+import com.Job.Application.Service.ReviewService;
+import com.Job.Application.Service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,68 +21,93 @@ import java.util.List;
 @RequestMapping("/companies/{companyId}/reviews")
 public class ReviewControllers {
 
-    private final ReviewService service;
-
+    private final ReviewService reviewService;
     private final CompanyService companyService;
+    private final UserService userService;
 
-    @GetMapping("/")
-    public ResponseEntity<List<Reviews>> getAllReviews(@PathVariable Long companyId) {
-        Companies company = companyService.getCompanyById(companyId);
-        if (company == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(company.getReviews(), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<List<Reviews>> getAllReviewsByCompanyId(@PathVariable("companyId") Long companyId) {
+        return ResponseEntity.ok().body(reviewService.getReviewsByCompanyId(companyId));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reviews> getReviewById(@PathVariable Long companyId, @PathVariable Long id) {
-        Reviews review = service.getReviewById(id);
-        if (review != null && review.getCompany() != null && review.getCompany().getId().equals(companyId)) {
-            return new ResponseEntity<>(review, HttpStatus.OK);
+    public ResponseEntity<Reviews> getReviewById(@PathVariable("companyId") Long companyId, @PathVariable("id") Long id) {
+        Reviews review = reviewService.getReviewById(id);
+        
+        // Ensure review belongs to the specified company
+        if (!review.getCompany().getId().equals(companyId)) {
+            return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        
+        return ResponseEntity.ok().body(review);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<?> postReview(@PathVariable Long companyId, @Valid @RequestBody Reviews review) {
-        try {
-            Companies company = companyService.getCompanyById(companyId);
-            if (company == null) {
-                return new ResponseEntity<>("Company not found", HttpStatus.NOT_FOUND);
-            }
-            review.setCompany(company);
-            return new ResponseEntity<>(service.postReview(review), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteReview(@PathVariable Long companyId, @PathVariable Long id) {
-        Reviews review = service.getReviewById(id);
-        if (review != null && review.getCompany() != null && review.getCompany().getId().equals(companyId)) {
-            service.deleteReview(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @PostMapping
+    @PreAuthorize("hasRole('JOB_SEEKER')")
+    public ResponseEntity<Reviews> createReview(
+            @PathVariable("companyId") Long companyId,
+            @Valid @RequestBody Reviews review) {
+        
+        // Associate review with company
+        Companies company = companyService.getCompanyById(companyId);
+        review.setCompany(company);
+        
+        // Associate with current user
+        User currentUser = userService.getCurrentUser();
+        review.setUserId(currentUser.getId());
+        
+        Reviews createdReview = reviewService.createReview(review);
+        return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateReview(@PathVariable Long companyId, 
-                                        @PathVariable Long id,
-                                        @Valid @RequestBody Reviews review) {
-        try {
-            Reviews existingReview = service.getReviewById(id);
-            if (existingReview != null && existingReview.getCompany() != null && 
-                existingReview.getCompany().getId().equals(companyId)) {
-                Companies company = companyService.getCompanyById(companyId);
-                review.setCompany(company);
-                review.setId(id);
-                return new ResponseEntity<>(service.updateReview(review, id), HttpStatus.OK);
-            }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    @PreAuthorize("hasRole('JOB_SEEKER') or hasRole('ADMIN')")
+    public ResponseEntity<Reviews> updateReview(
+            @PathVariable("companyId") Long companyId,
+            @PathVariable("id") Long id,
+            @Valid @RequestBody Reviews review) {
+        
+        // Ensure review belongs to the specified company
+        Reviews existingReview = reviewService.getReviewById(id);
+        if (!existingReview.getCompany().getId().equals(companyId)) {
+            return ResponseEntity.notFound().build();
         }
+        
+        // Check if current user is the owner of the review or an admin
+        User currentUser = userService.getCurrentUser();
+        if (!currentUser.getId().equals(existingReview.getUserId()) && 
+            !currentUser.getRoles().contains("ROLE_ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        
+        Companies company = companyService.getCompanyById(companyId);
+        review.setCompany(company);
+        review.setUserId(existingReview.getUserId());
+        
+        Reviews updatedReview = reviewService.updateReview(id, review);
+        return ResponseEntity.ok().body(updatedReview);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('JOB_SEEKER') or hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteReview(
+            @PathVariable("companyId") Long companyId,
+            @PathVariable("id") Long id) {
+        
+        // Ensure review belongs to the specified company
+        Reviews review = reviewService.getReviewById(id);
+        if (!review.getCompany().getId().equals(companyId)) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        // Check if current user is the owner of the review or an admin
+        User currentUser = userService.getCurrentUser();
+        if (!currentUser.getId().equals(review.getUserId()) && 
+            !currentUser.getRoles().contains("ROLE_ADMIN")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        
+        reviewService.deleteReview(id);
+        return ResponseEntity.noContent().build();
     }
 }

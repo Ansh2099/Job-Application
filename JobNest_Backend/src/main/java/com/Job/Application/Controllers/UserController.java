@@ -30,9 +30,9 @@ public class UserController {
      * Update the current user's profile (available to any authenticated user)
      */
     @PutMapping("/me")
-    public ResponseEntity<User> updateCurrentUser(@RequestBody User userUpdate) {
+    public ResponseEntity<Void> updateCurrentUser(@RequestBody User userUpdate) {
         User currentUser = userService.getCurrentUser();
-        
+
         // Only update fields that can be modified by the user
         if (userUpdate.getPhoneNumber() != null) {
             currentUser.setPhoneNumber(userUpdate.getPhoneNumber());
@@ -40,7 +40,7 @@ public class UserController {
         if (userUpdate.getProfilePicture() != null) {
             currentUser.setProfilePicture(userUpdate.getProfilePicture());
         }
-        
+
         // Update job seeker specific fields if the user is a job seeker
         if (currentUser.isJobSeeker()) {
             if (userUpdate.getResume() != null) {
@@ -53,7 +53,7 @@ public class UserController {
                 currentUser.setExperience(userUpdate.getExperience());
             }
         }
-        
+
         // Update recruiter specific fields if the user is a recruiter
         if (currentUser.isRecruiter()) {
             if (userUpdate.getPosition() != null) {
@@ -61,13 +61,7 @@ public class UserController {
             }
             // Company association should be handled separately
         }
-        
-        // Set first login to false if this is the first update
-        if (currentUser.isFirstLogin()) {
-            currentUser.setFirstLogin(false);
-        }
-        
-        return ResponseEntity.ok(userService.updateUser(currentUser));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
