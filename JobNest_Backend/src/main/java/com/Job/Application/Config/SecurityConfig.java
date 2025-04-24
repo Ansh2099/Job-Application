@@ -1,12 +1,16 @@
 package com.Job.Application.Config;
 
+import com.Job.Application.Filter.UserSynchronizerFilter;
+import com.Job.Application.Service.UserSynchronizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -18,10 +22,17 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity // Enable method-level security for @PreAuthorize annotations
 public class SecurityConfig {
 
     @Value("${app.cors.allowed-origins}")
     private String[] allowedOrigins;
+    
+    private final UserSynchronizer userSynchronizer;
+    
+    public SecurityConfig(UserSynchronizer userSynchronizer) {
+        this.userSynchronizer = userSynchronizer;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -49,6 +60,10 @@ public class SecurityConfig {
                 .oauth2ResourceServer(auth ->
                         auth.jwt(token ->
                                 token.jwtAuthenticationConverter(new KeycloakJwtAuthenticationConverter())));
+        
+        // Add the UserSynchronizerFilter to synchronize user data on each request
+        http.addFilterAfter(new UserSynchronizerFilter(userSynchronizer), UsernamePasswordAuthenticationFilter.class);
+        
         return http.build();
     }
 
