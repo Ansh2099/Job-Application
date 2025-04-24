@@ -43,7 +43,7 @@ public class JobSubmissionController {
         
         // Associate with current user
         User currentUser = userService.getCurrentUser();
-        application.setUserId(currentUser.getId());
+        application.setId(currentUser.getId());
         
         // Use user profile data if available
         if (application.getApplicantName() == null || application.getApplicantName().isBlank()) {
@@ -82,7 +82,7 @@ public class JobSubmissionController {
     @PreAuthorize("hasRole('JOB_SEEKER')")
     public ResponseEntity<List<JobSubmission>> getMyApplications() {
         User currentUser = userService.getCurrentUser();
-        List<JobSubmission> applications = jobSubmissionService.getApplicationsByUserId(currentUser.getId());
+        List<JobSubmission> applications = jobSubmissionService.getApplicationsByUserId(String.valueOf(currentUser.getId()));
         return ResponseEntity.ok(applications);
     }
 

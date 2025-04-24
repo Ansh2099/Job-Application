@@ -39,9 +39,6 @@ public class UserController {
         if (userUpdate.getPhoneNumber() != null) {
             currentUser.setPhoneNumber(userUpdate.getPhoneNumber());
         }
-        if (userUpdate.getProfilePicture() != null) {
-            currentUser.setProfilePicture(userUpdate.getProfilePicture());
-        }
 
         // Update job seeker specific fields if the user is a job seeker
         if (currentUser.isJobSeeker()) {

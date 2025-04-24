@@ -56,7 +56,7 @@ public class ReviewControllers {
         
         // Associate with current user
         User currentUser = userService.getCurrentUser();
-        review.setUserId(currentUser.getId());
+        review.setId(currentUser.getId());
         
         Reviews createdReview = reviewService.createReview(review);
         return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
@@ -77,14 +77,14 @@ public class ReviewControllers {
         
         // Check if current user is the owner of the review or an admin
         User currentUser = userService.getCurrentUser();
-        if (!currentUser.getId().equals(existingReview.getUserId()) && 
+        if (!currentUser.getId().equals(existingReview.getId()) &&
             !currentUser.getRoles().contains("ROLE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         
         Companies company = companyService.getCompanyById(companyId);
         review.setCompany(company);
-        review.setUserId(existingReview.getUserId());
+        review.setId(existingReview.getId());
         
         Reviews updatedReview = reviewService.updateReview(id, review);
         return ResponseEntity.ok().body(updatedReview);
@@ -104,7 +104,7 @@ public class ReviewControllers {
         
         // Check if current user is the owner of the review or an admin
         User currentUser = userService.getCurrentUser();
-        if (!currentUser.getId().equals(review.getUserId()) && 
+        if (!currentUser.getId().equals(review.getId()) &&
             !currentUser.getRoles().contains("ROLE_ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
