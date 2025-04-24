@@ -1,11 +1,7 @@
 package com.Job.Application.Model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -13,16 +9,13 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.JoinColumn;
-
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "jobs")
 public class Jobs {
 
     @Id
@@ -35,7 +28,7 @@ public class Jobs {
 
     @NotBlank
     @Size(max = 1000)
-    private String desc;
+    private String description;
 
     @NotBlank
     private String minSalary;

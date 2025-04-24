@@ -1,11 +1,11 @@
 package com.Job.Application.Model;
 
 import com.Job.Application.Common.BaseAuditClass;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
@@ -14,12 +14,13 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 
 public class User extends BaseAuditClass {
 
     @Id
-    private String id; // Using Keycloak UUID as primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Using Keycloak UUID as primary key
     
     @NotBlank
     private String username;
@@ -33,14 +34,12 @@ public class User extends BaseAuditClass {
     @Email
     @NotBlank
     private String email;
-    
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
+
+    @Transient
+    @Column(name = "roles")
     private Set<String> roles;
-    
+
     // Common profile fields
-    private String profilePicture;
     private String phoneNumber;
     
     // Job Seeker specific fields
@@ -59,8 +58,13 @@ public class User extends BaseAuditClass {
     public boolean isJobSeeker() {
         return roles != null && roles.contains("ROLE_JOB_SEEKER");
     }
-    
+
+    @Transient
     public boolean isRecruiter() {
         return roles != null && roles.contains("ROLE_RECRUITER");
     }
-} 
+
+    public Boolean isFirstLogin() {
+        return true;
+    }
+}

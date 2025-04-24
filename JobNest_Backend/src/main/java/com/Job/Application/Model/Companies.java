@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "companies")
 public class Companies {
 
     @Id
@@ -26,7 +27,7 @@ public class Companies {
 
     @NotBlank(message = "Description cannot be blank")
     @Size(max = 1000)
-    private String desc;
+    private String description;
 
     @JsonIgnore
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)

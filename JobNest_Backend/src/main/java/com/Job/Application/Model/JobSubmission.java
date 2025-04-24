@@ -7,22 +7,27 @@ import lombok.*;
 
 import com.Job.Application.Constants.ApplicationStatus;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "job_submission")
 public class JobSubmission {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    // ID of the user who submitted the application
-    private String userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
     
     @NotBlank
+    @Column(name = "applicant_name")
     private String applicantName;
     
     @NotBlank
@@ -32,13 +37,13 @@ public class JobSubmission {
     @NotBlank
     private String resume; // This could be a file path or URL
     
-    @Column(length = 1000)
+    @Column(name = "cover_letter", length = 1000)
     private String coverLetter;
     
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status = ApplicationStatus.PENDING;
     
-    private java.time.LocalDateTime submissionDate = java.time.LocalDateTime.now();
+    private LocalDateTime submissionDate = LocalDateTime.now();
     
     @ManyToOne
     @JoinColumn(name = "job_id")

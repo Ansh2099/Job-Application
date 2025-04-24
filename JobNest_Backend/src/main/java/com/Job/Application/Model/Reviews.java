@@ -12,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "reviews")
 public class Reviews {
 
     @Id
@@ -27,10 +28,11 @@ public class Reviews {
     private String description;
 
     @NotNull(message = "Rating cannot be null")
-    private double rating;
-    
-    // ID of the user who created the review
-    private String userId;
+    private long rating;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "company_id")
