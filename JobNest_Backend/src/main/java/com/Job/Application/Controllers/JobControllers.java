@@ -6,6 +6,7 @@ import com.Job.Application.Model.User;
 import com.Job.Application.Service.CompanyService;
 import com.Job.Application.Service.JobsService;
 import com.Job.Application.Service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/companies/{companyId}/jobs")
+@RequestMapping("/api/v1/companies/{companyId}/jobs")
 @RequiredArgsConstructor
+@Tag(name = "Job Controller")
 public class JobControllers {
 
     private final JobsService jobsService;

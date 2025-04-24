@@ -6,6 +6,7 @@ import com.Job.Application.Model.User;
 import com.Job.Application.Service.CompanyService;
 import com.Job.Application.Service.ReviewService;
 import com.Job.Application.Service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,8 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/companies/{companyId}/reviews")
+@RequestMapping("/api/v1/companies/{companyId}/reviews")
+@Tag(name = "Review Controller")
 public class ReviewControllers {
 
     private final ReviewService reviewService;

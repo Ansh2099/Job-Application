@@ -4,6 +4,7 @@ import com.Job.Application.Model.Companies;
 import com.Job.Application.Model.User;
 import com.Job.Application.Service.CompanyService;
 import com.Job.Application.Service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,8 +16,9 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/companies")
+@RequestMapping("/api/v1/companies")
 @RequiredArgsConstructor
+@Tag(name = "Company Controller")
 public class CompanyControllers {
 
     private final CompanyService companyService;

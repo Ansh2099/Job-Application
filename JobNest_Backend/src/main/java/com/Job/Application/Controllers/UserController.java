@@ -2,6 +2,7 @@ package com.Job.Application.Controllers;
 
 import com.Job.Application.Model.User;
 import com.Job.Application.Service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@Tag(name = "User Controller")
 public class UserController {
 
     private final UserService userService;
