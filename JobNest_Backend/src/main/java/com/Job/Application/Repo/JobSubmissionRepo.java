@@ -10,4 +10,5 @@ import java.util.List;
 public interface JobSubmissionRepo extends JpaRepository<JobSubmission, Long> {
     List<JobSubmission> findByJobCompanyId(Long companyId);
     List<JobSubmission> findByJobId(Long jobId);
+    List<JobSubmission> findByUserId(Long userId);
 } 

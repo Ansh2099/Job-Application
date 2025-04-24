@@ -11,7 +11,7 @@ import java.util.List;
 public interface CompanyRepo extends JpaRepository<Companies, Long> {
     @Query("SELECT p from Companies p WHERE " +
             "LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(p.desc) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+            "LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Companies> searchByKeyword(String keyword);
 
 }
