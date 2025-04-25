@@ -1,6 +1,8 @@
 package com.Job.Application.Controllers;
 
+import com.Job.Application.Mappers.UserMapper;
 import com.Job.Application.Model.User;
+import com.Job.Application.Response.UserResponse;
 import com.Job.Application.Service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -19,13 +22,15 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     /**
      * Get the current user profile (available to any authenticated user)
      */
     @GetMapping("/me")
-    public ResponseEntity<User> getCurrentUser() {
-        return ResponseEntity.ok(userService.getCurrentUser());
+    public ResponseEntity<UserResponse> getCurrentUser() {
+        User user = userService.getCurrentUser();
+        return ResponseEntity.ok(userMapper.toUserResponse(user));
     }
 
     /**
@@ -60,6 +65,8 @@ public class UserController {
             }
             // Company association should be handled separately
         }
+        
+        userService.updateUser(currentUser);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -68,8 +75,11 @@ public class UserController {
      */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        List<UserResponse> userResponses = userService.getAllUsers().stream()
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(userResponses);
     }
 
     /**
@@ -77,10 +87,11 @@ public class UserController {
      */
     @GetMapping("/job-seekers")
     @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
-    public ResponseEntity<List<User>> getJobSeekers() {
-        List<User> jobSeekers = userService.getAllUsers().stream()
+    public ResponseEntity<List<UserResponse>> getJobSeekers() {
+        List<UserResponse> jobSeekers = userService.getAllUsers().stream()
                 .filter(User::isJobSeeker)
-                .toList();
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(jobSeekers);
     }
 
@@ -89,10 +100,11 @@ public class UserController {
      */
     @GetMapping("/recruiters")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<User>> getRecruiters() {
-        List<User> recruiters = userService.getAllUsers().stream()
+    public ResponseEntity<List<UserResponse>> getRecruiters() {
+        List<UserResponse> recruiters = userService.getAllUsers().stream()
                 .filter(User::isRecruiter)
-                .toList();
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(recruiters);
     }
 

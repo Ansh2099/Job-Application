@@ -1,7 +1,9 @@
 package com.Job.Application.Controllers;
 
+import com.Job.Application.Mappers.CompanyMapper;
 import com.Job.Application.Model.Companies;
 import com.Job.Application.Model.User;
+import com.Job.Application.Response.CompanyResponse;
 import com.Job.Application.Service.CompanyService;
 import com.Job.Application.Service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -23,21 +26,25 @@ public class CompanyControllers {
 
     private final CompanyService companyService;
     private final UserService userService;
+    private final CompanyMapper companyMapper;
 
     @GetMapping
-    public ResponseEntity<List<Companies>> getAllCompanies()
-    {
-        return ResponseEntity.ok().body(companyService.getAllCompanies());
+    public ResponseEntity<List<CompanyResponse>> getAllCompanies() {
+        List<CompanyResponse> companyResponses = companyService.getAllCompanies().stream()
+                .map(companyMapper::toCompanyResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(companyResponses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Companies> getCompanyById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok().body(companyService.getCompanyById(id));
+    public ResponseEntity<CompanyResponse> getCompanyById(@PathVariable("id") Long id) {
+        Companies company = companyService.getCompanyById(id);
+        return ResponseEntity.ok().body(companyMapper.toCompanyResponse(company));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('RECRUITER')")
-    public ResponseEntity<Companies> createCompany(@Valid @RequestBody Companies company) {
+    public ResponseEntity<CompanyResponse> createCompany(@Valid @RequestBody Companies company) {
         Companies createdCompany = companyService.createCompany(company);
         
         // If a recruiter is creating a company, associate them with it
@@ -47,22 +54,24 @@ public class CompanyControllers {
             userService.updateUser(currentUser);
         }
         
-        return new ResponseEntity<>(createdCompany, HttpStatus.CREATED);
+        return new ResponseEntity<>(companyMapper.toCompanyResponse(createdCompany), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('RECRUITER')")
-    public ResponseEntity<Companies> updateCompany(@PathVariable("id") Long id, @Valid @RequestBody Companies company) {
-        // Check if the recruiter is associated with this company
+    public ResponseEntity<CompanyResponse> updateCompany(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody Companies companyDetails) {
+        
+        // Check if current user is a recruiter for this company
         User currentUser = userService.getCurrentUser();
         if (currentUser.isRecruiter() && 
             (currentUser.getCompany() == null || !currentUser.getCompany().getId().equals(id))) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         
-        Companies updatedCompany = companyService.updateCompany(id, company);
-        return ResponseEntity.ok().body(updatedCompany);
+        Companies updatedCompany = companyService.updateCompany(id, companyDetails);
+        return ResponseEntity.ok().body(companyMapper.toCompanyResponse(updatedCompany));
     }
 
     @DeleteMapping("/{id}")
