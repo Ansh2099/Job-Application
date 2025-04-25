@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -25,7 +26,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity // Enable method-level security for @PreAuthorize annotations
 public class SecurityConfig {
 
-    @Value("${app.cors.allowed-origins}")
+    @Value("${spring.app.cors.allowed-origins}")
     private String[] allowedOrigins;
     
     private final UserSynchronizer userSynchronizer;
