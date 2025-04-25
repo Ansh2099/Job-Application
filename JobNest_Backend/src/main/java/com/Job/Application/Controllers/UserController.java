@@ -109,15 +109,6 @@ public class UserController {
     }
 
     /**
-     * Check first login status
-     */
-    @GetMapping("/first-login")
-    public ResponseEntity<Map<String, Boolean>> isFirstLogin() {
-        User currentUser = userService.getCurrentUser();
-        return ResponseEntity.ok(Map.of("firstLogin", currentUser.isFirstLogin()));
-    }
-
-    /**
      * Associate a recruiter with a company (available only to recruiters)
      */
     @PutMapping("/recruiters/company/{companyId}")
