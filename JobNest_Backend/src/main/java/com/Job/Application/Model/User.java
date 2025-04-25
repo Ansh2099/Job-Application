@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -18,6 +19,7 @@ import java.util.Set;
 
 public class User extends BaseAuditClass {
 
+    private static final int LAST_ACTIVATE_INTERVAL = 5;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Using Keycloak UUID as primary key
@@ -52,6 +54,7 @@ public class User extends BaseAuditClass {
     @JoinColumn(name = "company_id")
     private Companies company;
     private String position;
+    private LocalDateTime lastSeen;
 
     // Utility methods
     @Transient
@@ -66,5 +69,10 @@ public class User extends BaseAuditClass {
 
     public Boolean isFirstLogin() {
         return true;
+    }
+
+    @Transient
+    public boolean isUserOnline() {
+        return lastSeen != null && lastSeen.isAfter(LocalDateTime.now().minusMinutes(LAST_ACTIVATE_INTERVAL));
     }
 }
