@@ -1,7 +1,7 @@
 # JobNest - Job Application Platform
 
 ## Live Demo
-- Backend API: [Insert Render Backend URL here]
+- Backend API: https://jobnest-k02z.onrender.com
 - Frontend: [Coming Soon]
 
 ## Project Overview
