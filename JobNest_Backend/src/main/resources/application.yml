@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: ${DATABASE_URL}
-    # username: ${POSTGRES_USER}
-    # password: ${POSTGRES_PASSWORD}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -39,20 +39,20 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
 
-springdoc:
-  default-produces-media-type: application/json
+  springdoc:
+    default-produces-media-type: application/json
 
-application:
-  file:
-    uploads:
-      media-output-path: ./uploads
+  application:
+    file:
+      uploads:
+        media-output-path: ./uploads
 
-app:
-  cors:
-    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:4200}
+  app:
+    cors:
+      allowed-origins: ${ALLOWED_ORIGINS:http://localhost:4200}
     
-cloudinary:
-  cloud-name: ${CLOUDINARY_CLOUD_NAME}
-  api-key: ${CLOUDINARY_API_KEY}
-  api-secret: ${CLOUDINARY_API_SECRET}
-  upload-folder: ${CLOUDINARY_UPLOAD_FOLDER:JobNest/uploads}
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+    api-key: ${CLOUDINARY_API_KEY}
+    api-secret: ${CLOUDINARY_API_SECRET}
+    upload-folder: ${CLOUDINARY_UPLOAD_FOLDER:JobNest/uploads}
