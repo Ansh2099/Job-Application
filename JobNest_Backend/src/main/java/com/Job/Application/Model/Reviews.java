@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import com.Job.Application.Constants.ReviewsConstants;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -13,6 +15,9 @@ import lombok.*;
 @Getter
 @Setter
 @Table(name = "reviews")
+@NamedQueries({
+    @NamedQuery(name = ReviewsConstants.FindByCompanyId, query = "SELECT r FROM Reviews r WHERE r.company.id = :companyId")
+})
 public class Reviews {
 
     @Id

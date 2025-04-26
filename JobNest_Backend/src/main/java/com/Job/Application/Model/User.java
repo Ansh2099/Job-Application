@@ -1,6 +1,7 @@
 package com.Job.Application.Model;
 
 import com.Job.Application.Common.BaseAuditClass;
+import com.Job.Application.Constants.UserConstants;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +13,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@NamedQueries({
+    @NamedQuery(name = UserConstants.FindByEmail, query = "SELECT u FROM User u WHERE u.email = :email"),
+    @NamedQuery(name = UserConstants.FindByUsername, query = "SELECT u FROM User u WHERE u.username = :username"),
+    @NamedQuery(name = UserConstants.ExistsByEmail, query = "SELECT CASE WHEN COUNT(u)>0 THEN TRUE ELSE FALSE END FROM User u WHERE u.email = :email")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

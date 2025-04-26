@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import com.Job.Application.Constants.ApplicationStatus;
+import com.Job.Application.Constants.JobSubmissionConstants;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +17,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "job_submission")
+@NamedQueries({
+    @NamedQuery(name = JobSubmissionConstants.FindByJobCompanyId, query = "SELECT js FROM JobSubmission js WHERE js.job.company.id = :companyId"),
+    @NamedQuery(name = JobSubmissionConstants.FindByJobId, query = "SELECT js FROM JobSubmission js WHERE js.job.id = :jobId"),
+    @NamedQuery(name = JobSubmissionConstants.FindByUserId, query = "SELECT js FROM JobSubmission js WHERE js.user.id = :userId")
+})
 public class JobSubmission {
     
     @Id
