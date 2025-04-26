@@ -1,5 +1,6 @@
 package com.Job.Application.Model;
 
+import com.Job.Application.Constants.CompanyConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -15,6 +16,12 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "companies")
+
+@NamedQueries(
+        {
+                @NamedQuery(name = CompanyConstants.SearchByKeyword, query = "SELECT c FROM Companies c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(c.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+        }
+)
 public class Companies {
 
     @Id

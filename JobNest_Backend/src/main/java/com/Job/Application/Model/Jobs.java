@@ -8,6 +8,7 @@ import lombok.*;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.Job.Application.Constants.JobsConstants;
 
 @Data
 @Entity
@@ -16,6 +17,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Getter
 @Setter
 @Table(name = "jobs")
+@NamedQueries({
+    @NamedQuery(name = JobsConstants.FindByCompanyId, query = "SELECT j FROM Jobs j WHERE j.company.id = :companyId")
+})
 public class Jobs {
 
     @Id
