@@ -1,7 +1,7 @@
 # JobNest - Job Application Platform
 
 ## Live Demo
-- Backend API: https://jobnest-k02z.onrender.com
+- Backend API Docs: https://jobnest-k02z.onrender.com/swagger-ui/index.html
 - Frontend: [Coming Soon]
 
 ## Project Overview
